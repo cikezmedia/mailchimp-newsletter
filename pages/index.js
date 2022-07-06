@@ -46,9 +46,12 @@ const Home = () => {
       </Head>
 
       <main className='flex w-full flex-1 flex-col items-center justify-center px-20 text-center'>
-        <h1 className='text-3xl tracking-wide font-bold text-lightYellow'>
+        <h1 className='text-3xl pb-4 tracking-wide font-bold text-lightYellow'>
           Newsletter
         </h1>
+        <p className='text-lightGreen'>
+          Mailchimp Newsletter created with NextJS and TailwindCSS
+        </p>
 
         <div className='relative flex flex-row items-center max-w-3xl pt-8'>
           <input
