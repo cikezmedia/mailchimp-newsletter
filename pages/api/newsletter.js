@@ -6,8 +6,12 @@ export default async (req, res) => {
 
   const API_KEY = process.env.MAILCHIMP_API_KEY;
   const AUDIENCE_ID = process.env.MAILCHIMP_AUDIENCE_ID;
+  const MAIL_SERVER = process.env.MAILCHIMP_SERVER;
+  // MAILCHIMP_API_KEY looks like d6f7046baf81848oep0f94y9b09768ed
+  // MAILCHIMP_AUDIENCE_ID looks like 69po748rue
+  // MAILCHIMP_SERVER looks like us17
 
-  const url = `https://us17.api.mailchimp.com/3.0/lists/${AUDIENCE_ID}/members`;
+  const url = `https://${MAIL_SERVER}.api.mailchimp.com/3.0/lists/${AUDIENCE_ID}/members`;
 
   const subscriber = {
     email_address: email,
@@ -17,26 +21,18 @@ export default async (req, res) => {
   const options = {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `api_key ${API_KEY}`,
+      Authorization: `Bearer ${API_KEY}`,
     },
   };
 
   try {
-    const result = await axios.post(url, subscriber, options);
-    // if (response.status >= 400) {
-    //   return res.status(400).json({
-    //     message: `There was an error subscribing to the newsletter. Contact the original creator at ogbonnakell@gmail.com and he will assist you.`,
-    //   });
-    // }
-    if (result.status >= 400) {
-      return res
-        .status(400)
-        .send({ result: 'There was an error subscribing to the newsletter' });
+    await axios.post(url, subscriber, options);
+    res.status(201).send();
+  } catch (err) {
+    if (err.errno) {
+      res.status(203).send();
+    } else {
+      res.status(202).send();
     }
-    return res
-      .status(201)
-      .send({ result: 'Thank you for subscribing to our newsletter.' });
-  } catch (error) {
-    return res.status(500).send({ error: 'Newsletter subscription failed' });
   }
 };

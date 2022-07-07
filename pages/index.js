@@ -15,26 +15,34 @@ const Home = () => {
   }
 
   const subscribe = async () => {
+    if (!isValidEmail(email)) {
+      setResMessage('Please enter a valid email');
+      setTimeout(() => {
+        setResMessage('');
+      }, 3000);
+      return;
+    }
+    const valid_email = isValidEmail(email);
+    setEmail(valid_email);
+    const payload = {
+      validMail: email,
+    };
     try {
-      if (!isValidEmail(email)) {
-        setResMessage('Please enter a valid email');
-        setTimeout(() => {
-          setResMessage('');
-        }, 3000);
+      const res = await axios.post('/api/newsletter', payload);
+      if (res.status == 201) {
+        setResMessage('Newsletter subscription successful');
+        setLoading('IDLE');
+      } else if (res.status == 202) {
+        setResMessage('You are already a subscriber');
+        setLoading('IDLE');
       } else {
-        const valid_email = isValidEmail(email);
-        setEmail(valid_email);
-        const payload = {
-          validMail: email,
-        };
-        await axios.post('/api/newsletter', payload);
-
-        setResMessage('Your subscription is successful');
-        setTimeout(() => setResMessage(), 3000);
+        setResMessage('There is a problem with your Mailchimp configuration');
+        setLoading('IDLE');
       }
-    } catch (error) {
-      setResMessage('You are already subscribed to our newsletter.');
-      setTimeout(() => setResMessage(), 3000);
+      setTimeout(() => setResMessage(), 5000);
+    } catch (e) {
+      setResMessage(`Newsletter subscription failed, please try again`);
+      setTimeout(() => setResMessage(), 5000);
     }
   };
 

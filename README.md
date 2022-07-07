@@ -15,11 +15,14 @@ Clone the repository.
 Create .env.local file and set up the file with
 MAILCHIMP_API_KEY=YOUR-MAILCHIMP-APIKEY
 MAILCHIMP_AUDIENCE_ID=YOUR-MAILCHIMP-AUDIENCE-ID
+MAILCHIMP_SERVER=GET_IT_FROM_MAILCHIMP
 
 You can get your Mailchimp Audience ID [here](https://mailchimp.com/help/find-audience-id/) and API Key [here](https://mailchimp.com/help/about-api-keys/)
 
 Configure your env and run app.
 
 ```bash
+yarn add
+
 yarn run dev
 ```
